@@ -20,6 +20,10 @@ public class Tour {
 		this.data = data;
 	}
 
+	/**
+	 * 経路を初期化し、経路長を計算する
+	 *
+	 */
 	public void initializeTour() {
 		for (int i = 0; i < cityNum; i++) {
 			cityArray[i] = i;
@@ -45,6 +49,10 @@ public class Tour {
 		tourLength = calcTour();
 	}
 
+	/**
+	 * 経路長を計算する
+	 * @return 経路長
+	 */
 	int calcTour() {
 		int dist = 0;
 		for (int i = 0; i < cityArray.length; i++) {
@@ -90,6 +98,13 @@ public class Tour {
 		}
 	}
 
+	/**
+	 * 都市A/B間と都市C/D間を入れ替える
+	 * @param cityA 都市ID_A
+	 * @param cityB 都市ID_B
+	 * @param cityC 都市ID_C
+	 * @param cityD 都市ID_D
+	 */
 	public void flipTour(int cityA, int cityB, int cityC, int cityD) {
 
 		updated = false;
