@@ -52,6 +52,10 @@ public class CandidateList {
 		size--;
 	}
 
+	public int getSize() {
+		return size;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

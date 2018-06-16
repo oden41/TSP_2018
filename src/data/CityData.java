@@ -20,14 +20,15 @@ public class CityData {
 			cityNum = Integer.parseInt(str);
 			while ((str = br.readLine()) != null) {
 				String[] split = str.split(" ");
-				//1-originのため -1して0-originに
-				data.put(Integer.parseInt(split[0]) - 1,
-						new Pair<>(Double.parseDouble(split[1]), Double.parseDouble(split[2])));
+				// 1-originのため -1して0-originに
+				data.put(Integer.parseInt(split[0]) - 1, new Pair<>(Double.parseDouble(split[1]), Double.parseDouble(split[2])));
 			}
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
@@ -39,5 +40,15 @@ public class CityData {
 
 	public Pair<Double, Double> getData(int cityID) {
 		return data.get(cityID);
+	}
+
+	public int calcDistance(int idA, int idB) {
+		Pair<Double, Double> cityA = getData(idA);
+		Pair<Double, Double> cityB = getData(idB);
+
+		double dx = cityA.getKey() - cityB.getKey();
+		double dy = cityA.getValue() - cityB.getValue();
+
+		return (int) (Math.sqrt(dx * dx + dy * dy) + 0.5);
 	}
 }

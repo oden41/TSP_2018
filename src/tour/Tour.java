@@ -173,6 +173,10 @@ public class Tour {
 		updated = false;
 	}
 
+	public void addLength(int diff) {
+		tourLength += diff;
+	}
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -181,4 +185,5 @@ public class Tour {
 		}
 		return sb.toString();
 	}
+
 }
