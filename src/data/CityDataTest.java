@@ -2,12 +2,12 @@ package data;
 
 import static org.junit.Assert.*;
 
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 class CityDataTest {
 
 	@Test
-	void testCityData() {
+	public void testCityData() {
 		String dir = System.getProperty("user.dir");
 		CityData data = new CityData(dir + "\\tsp_data\\ca4663.tsp");
 
