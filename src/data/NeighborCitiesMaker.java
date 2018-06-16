@@ -6,17 +6,33 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javafx.util.Pair;
 
 public class NeighborCitiesMaker {
 	CityData data;
 
-	public NeighborCitiesMaker(String filePath) {
+	public NeighborCitiesMaker(CityData data) {
 		// TODO 自動生成されたコンストラクター・スタブ
-		data = new CityData(filePath);
+		this.data = data;
+	}
+
+	public int[][] makeNeighborCityListFromPath(int cityNum, int k, String path) {
+		int[][] result = new int[cityNum][k];
+
+		try (Stream<String> stream = Files.lines(Paths.get(path))) {
+			// read each line
+			result = stream.map(line -> line.split(",")).map(line -> Arrays.stream(line).mapToInt(Integer::parseInt).toArray()).toArray(int[][]::new);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return result;
 	}
 
 	public int[][] makeNeighborCityList(int k) {
@@ -62,5 +78,26 @@ public class NeighborCitiesMaker {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public HashMap<Integer, ArrayList<Integer>> makeInverseNeighborCityList(int[][] neighborList) {
+		HashMap<Integer, ArrayList<Integer>> result = new HashMap<>();
+		int cityNum = neighborList.length;
+		int k = neighborList[0].length;
+
+		for (int i = 0; i < cityNum; i++) {
+			ArrayList<Integer> list = new ArrayList<>();
+			for (int j = 0; j < cityNum; j++) {
+				if (i == j)
+					continue;
+				for (int j2 = 0; j2 < k; j2++) {
+					if (neighborList[j][j2] == i)
+						list.add(j);
+				}
+
+			}
+			result.put(i, list);
+		}
+		return result;
 	}
 }

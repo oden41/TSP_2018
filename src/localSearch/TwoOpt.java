@@ -21,13 +21,14 @@ public class TwoOpt {
 		this.k = k;
 		this.data = data;
 		tour = new Tour(cityNum, data);
-		candidateList = new CandidateList(cityNum);
 		this.neighborList = neighborList;
 		this.inverseNL = invNL;
 	}
 
 	public void doOneTrial() {
+		candidateList = new CandidateList(cityNum);
 		tour.initializeTour();
+
 		while (candidateList.getSize() != 0) {
 			ITR:
 			{
@@ -84,5 +85,9 @@ public class TwoOpt {
 				candidateList.remove(cityA);
 			}
 		}
+	}
+
+	public int getLength() {
+		return tour.getTourLength();
 	}
 }
