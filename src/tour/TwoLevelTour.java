@@ -29,8 +29,25 @@ public class TwoLevelTour extends Tour {
 
 	@Override
 	public void initializeTour() {
-		// TODO 自動生成されたメソッド・スタブ
+		// ランダムに並んだ配列が欲しいため
 		super.initializeTour();
+
+		int segIndex = 0;
+		int segPos = 0;
+		for (int i = 0; i < cityNum; i++) {
+			segmentTour[segIndex][segPos] = cityArray[i];
+			positionInSegmentFromCityID[cityArray[i]] = segPos;
+			segmentIDFromCityID[cityArray[i]] = segIndex;
+			if (segPos == segmentTour[segIndex].length - 1) {
+				segmentIDFromIndex[segIndex] = segIndex;
+				segmentIndexFromID[segIndex] = segIndex;
+				segmentOrt[segIndex] = false;
+				segIndex++;
+				segPos = 0;
+			}
+			else
+				segPos++;
+		}
 	}
 
 	@Override
@@ -55,5 +72,16 @@ public class TwoLevelTour extends Tour {
 	public void flipTour(int cityA, int cityB, int cityC, int cityD) {
 		// TODO 自動生成されたメソッド・スタブ
 		super.flipTour(cityA, cityB, cityC, cityD);
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < segmentTour.length; i++) {
+			for (int j = 0; j < segmentTour[i].length; j++) {
+				sb.append(segmentTour[i][segmentOrt[i] ? segmentTour[i].length - j - 1 : j] + " ");
+			}
+		}
+		return sb.toString();
 	}
 }
