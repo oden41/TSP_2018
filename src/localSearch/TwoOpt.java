@@ -34,7 +34,7 @@ public class TwoOpt {
 			{
 				int cityA = candidateList.get();
 				int cityB;
-				for (int ort = 0; ort < 1; ort++) {
+				for (int ort = 0; ort < 2; ort++) {
 					if (ort == 0)
 						cityB = tour.next(cityA);
 					else
@@ -62,7 +62,7 @@ public class TwoOpt {
 							candidateList.add(cityC);
 							candidateList.add(cityD);
 
-							tour.addLength(diff);
+							// tour.addLength(diff);
 
 							for (Integer city : inverseNL.get(cityA)) {
 								candidateList.add(city);
