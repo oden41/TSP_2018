@@ -1,6 +1,7 @@
 package tour;
 
 import data.CityData;
+import data.Param;
 
 public class TwoLevelTour extends Tour {
 	int segNum;
@@ -44,22 +45,85 @@ public class TwoLevelTour extends Tour {
 				segmentOrt[segIndex] = false;
 				segIndex++;
 				segPos = 0;
-			}
-			else
+			} else
 				segPos++;
 		}
+
+		for (int i = 0; i < segNum; i++) {
+			int index = Param.rand.nextInt(segNum - i) + i;
+			swapSegmentIndex(segmentIDFromIndex[i], segmentIDFromIndex[index]);
+			swapSegmentID(i, index);
+		}
+	}
+
+	/**
+	 * segmentIndexをスワップする
+	 * @param i
+	 * @param index
+	 */
+	void swapSegmentIndex(int i, int j) {
+		int tempIndex = segmentIndexFromID[i];
+		segmentIndexFromID[i] = segmentIndexFromID[j];
+		segmentIndexFromID[j] = tempIndex;
+	}
+
+	/**
+	 * segmentIDをスワップする
+	 * @param i
+	 * @param index
+	 */
+	void swapSegmentID(int i, int index) {
+		int tempID = segmentIDFromIndex[i];
+		segmentIDFromIndex[i] = segmentIDFromIndex[index];
+		segmentIDFromIndex[index] = tempID;
 	}
 
 	@Override
 	public int prev(int cityID) {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.prev(cityID);
+		int currentSegID = segmentIDFromCityID[cityID];
+		if (segmentOrt[currentSegID]) {
+			//逆方向
+			if (positionInSegmentFromCityID[cityID] == segmentTour[currentSegID].length - 1) {
+				int prevSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == 0 ? segmentTour.length - 1
+						: segmentIndexFromID[currentSegID] - 1];
+				return segmentTour[prevSegID][segmentOrt[prevSegID] ? 0 : segmentTour[prevSegID].length - 1];
+			} else {
+				return segmentTour[currentSegID][positionInSegmentFromCityID[cityID] + 1];
+			}
+		} else {
+			//順方向
+			if (positionInSegmentFromCityID[cityID] == 0) {
+				int prevSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == 0 ? segmentTour.length - 1
+						: segmentIndexFromID[currentSegID] - 1];
+				return segmentTour[prevSegID][segmentOrt[prevSegID] ? 0 : segmentTour[prevSegID].length - 1];
+			} else {
+				return segmentTour[currentSegID][positionInSegmentFromCityID[cityID] - 1];
+			}
+		}
 	}
 
 	@Override
 	public int next(int cityID) {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.next(cityID);
+		int currentSegID = segmentIDFromCityID[cityID];
+		if (segmentOrt[currentSegID]) {
+			//逆方向
+			if (positionInSegmentFromCityID[cityID] == 0) {
+				int nextSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == segmentTour.length - 1 ? 0
+						: segmentIndexFromID[currentSegID] + 1];
+				return segmentTour[nextSegID][segmentOrt[nextSegID] ? segmentTour[nextSegID].length - 1 : 0];
+			} else {
+				return segmentTour[currentSegID][positionInSegmentFromCityID[cityID] - 1];
+			}
+		} else {
+			//順方向
+			if (positionInSegmentFromCityID[cityID] == segmentTour[currentSegID].length - 1) {
+				int nextSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == segmentTour.length - 1 ? 0
+						: segmentIndexFromID[currentSegID] + 1];
+				return segmentTour[nextSegID][segmentOrt[nextSegID] ? segmentTour[nextSegID].length - 1 : 0];
+			} else {
+				return segmentTour[currentSegID][positionInSegmentFromCityID[cityID] + 1];
+			}
+		}
 	}
 
 	@Override
@@ -78,8 +142,10 @@ public class TwoLevelTour extends Tour {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < segmentTour.length; i++) {
-			for (int j = 0; j < segmentTour[i].length; j++) {
-				sb.append(segmentTour[i][segmentOrt[i] ? segmentTour[i].length - j - 1 : j] + " ");
+			for (int j = 0; j < segmentTour[segmentIDFromIndex[i]].length; j++) {
+				sb.append(segmentTour[segmentIDFromIndex[i]][segmentOrt[segmentIDFromIndex[i]]
+						? segmentTour[segmentIDFromIndex[i]].length - j - 1
+						: j] + " ");
 			}
 		}
 		return sb.toString();
