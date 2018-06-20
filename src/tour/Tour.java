@@ -76,20 +76,33 @@ public class Tour {
 	int calcTour() {
 		int dist = 0;
 		for (int i = 0; i < cityArray.length; i++) {
-			double dx;
-			double dy;
+			int cityA;
+			int cityB;
 			if (i != cityNum - 1) {
-				dx = data.getData(cityArray[i + 1]).getKey() - data.getData(cityArray[i]).getKey();
-				dy = data.getData(cityArray[i + 1]).getValue() - data.getData(cityArray[i]).getValue();
+				cityA = cityArray[i + 1];
+				cityB = cityArray[i];
 			}
 			else {
-				dx = data.getData(cityArray[i]).getKey() - data.getData(cityArray[0]).getKey();
-				dy = data.getData(cityArray[i]).getValue() - data.getData(cityArray[0]).getValue();
+				cityA = cityArray[i];
+				cityB = cityArray[0];
 			}
-			dist += (int) (Math.sqrt(dx * dx + dy * dy) + 0.5);
+			dist += calcDist(cityA, cityB);
 		}
 		updated = true;
 		return dist;
+	}
+
+	/**
+	 * cityIDを受け取り距離を返す関数
+	 *
+	 * @param prevCity
+	 * @param currentCity
+	 * @return
+	 */
+	int calcDist(int prevCity, int currentCity) {
+		double dx = data.getData(prevCity).getKey() - data.getData(currentCity).getKey();
+		double dy = data.getData(prevCity).getValue() - data.getData(currentCity).getValue();
+		return (int) (Math.sqrt(dx * dx + dy * dy) + 0.5);
 	}
 
 	/**

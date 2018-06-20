@@ -45,7 +45,8 @@ public class TwoLevelTour extends Tour {
 				segmentOrt[segIndex] = false;
 				segIndex++;
 				segPos = 0;
-			} else
+			}
+			else
 				segPos++;
 		}
 
@@ -54,10 +55,13 @@ public class TwoLevelTour extends Tour {
 			swapSegmentIndex(segmentIDFromIndex[i], segmentIDFromIndex[index]);
 			swapSegmentID(i, index);
 		}
+
+		tourLength = calcTour();
 	}
 
 	/**
 	 * segmentIndexをスワップする
+	 *
 	 * @param i
 	 * @param index
 	 */
@@ -69,6 +73,7 @@ public class TwoLevelTour extends Tour {
 
 	/**
 	 * segmentIDをスワップする
+	 *
 	 * @param i
 	 * @param index
 	 */
@@ -82,21 +87,22 @@ public class TwoLevelTour extends Tour {
 	public int prev(int cityID) {
 		int currentSegID = segmentIDFromCityID[cityID];
 		if (segmentOrt[currentSegID]) {
-			//逆方向
+			// 逆方向
 			if (positionInSegmentFromCityID[cityID] == segmentTour[currentSegID].length - 1) {
-				int prevSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == 0 ? segmentTour.length - 1
-						: segmentIndexFromID[currentSegID] - 1];
+				int prevSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == 0 ? segmentTour.length - 1 : segmentIndexFromID[currentSegID] - 1];
 				return segmentTour[prevSegID][segmentOrt[prevSegID] ? 0 : segmentTour[prevSegID].length - 1];
-			} else {
+			}
+			else {
 				return segmentTour[currentSegID][positionInSegmentFromCityID[cityID] + 1];
 			}
-		} else {
-			//順方向
+		}
+		else {
+			// 順方向
 			if (positionInSegmentFromCityID[cityID] == 0) {
-				int prevSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == 0 ? segmentTour.length - 1
-						: segmentIndexFromID[currentSegID] - 1];
+				int prevSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == 0 ? segmentTour.length - 1 : segmentIndexFromID[currentSegID] - 1];
 				return segmentTour[prevSegID][segmentOrt[prevSegID] ? 0 : segmentTour[prevSegID].length - 1];
-			} else {
+			}
+			else {
 				return segmentTour[currentSegID][positionInSegmentFromCityID[cityID] - 1];
 			}
 		}
@@ -106,21 +112,22 @@ public class TwoLevelTour extends Tour {
 	public int next(int cityID) {
 		int currentSegID = segmentIDFromCityID[cityID];
 		if (segmentOrt[currentSegID]) {
-			//逆方向
+			// 逆方向
 			if (positionInSegmentFromCityID[cityID] == 0) {
-				int nextSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == segmentTour.length - 1 ? 0
-						: segmentIndexFromID[currentSegID] + 1];
+				int nextSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == segmentTour.length - 1 ? 0 : segmentIndexFromID[currentSegID] + 1];
 				return segmentTour[nextSegID][segmentOrt[nextSegID] ? segmentTour[nextSegID].length - 1 : 0];
-			} else {
+			}
+			else {
 				return segmentTour[currentSegID][positionInSegmentFromCityID[cityID] - 1];
 			}
-		} else {
-			//順方向
+		}
+		else {
+			// 順方向
 			if (positionInSegmentFromCityID[cityID] == segmentTour[currentSegID].length - 1) {
-				int nextSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == segmentTour.length - 1 ? 0
-						: segmentIndexFromID[currentSegID] + 1];
+				int nextSegID = segmentIDFromIndex[segmentIndexFromID[currentSegID] == segmentTour.length - 1 ? 0 : segmentIndexFromID[currentSegID] + 1];
 				return segmentTour[nextSegID][segmentOrt[nextSegID] ? segmentTour[nextSegID].length - 1 : 0];
-			} else {
+			}
+			else {
 				return segmentTour[currentSegID][positionInSegmentFromCityID[cityID] + 1];
 			}
 		}
@@ -128,14 +135,22 @@ public class TwoLevelTour extends Tour {
 
 	@Override
 	int calcTour() {
-		// TODO 自動生成されたメソッド・スタブ
-		return super.calcTour();
+		int dist = 0;
+		int prevCity = 0;
+		int currentCity = segmentTour[segmentIDFromIndex[0]][segmentOrt[segmentIDFromIndex[0]] ? segmentTour[segmentIDFromIndex[0]].length - 1 : 0];
+
+		for (int i = 0; i < cityNum; i++) {
+			prevCity = currentCity;
+			currentCity = next(prevCity);
+			dist += calcDist(prevCity, currentCity);
+		}
+		return dist;
 	}
 
 	@Override
 	public void flipTour(int cityA, int cityB, int cityC, int cityD) {
-		// TODO 自動生成されたメソッド・スタブ
-		super.flipTour(cityA, cityB, cityC, cityD);
+
+		updated = false;
 	}
 
 	@Override
@@ -143,9 +158,7 @@ public class TwoLevelTour extends Tour {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < segmentTour.length; i++) {
 			for (int j = 0; j < segmentTour[segmentIDFromIndex[i]].length; j++) {
-				sb.append(segmentTour[segmentIDFromIndex[i]][segmentOrt[segmentIDFromIndex[i]]
-						? segmentTour[segmentIDFromIndex[i]].length - j - 1
-						: j] + " ");
+				sb.append(segmentTour[segmentIDFromIndex[i]][segmentOrt[segmentIDFromIndex[i]] ? segmentTour[segmentIDFromIndex[i]].length - j - 1 : j] + " ");
 			}
 		}
 		return sb.toString();

@@ -3,7 +3,6 @@ package tour;
 import java.util.Random;
 
 import org.junit.Before;
-import org.junit.Test;
 
 import data.CityData;
 import data.Param;
@@ -21,13 +20,22 @@ public class TwoLevelTourTest {
 		Param.rand = new Random(1);
 	}
 
-	//@Test
+	// @Test
 	public void testInitializeTour() {
 		tour.initializeTour();
 		System.out.println(tour);
 	}
 
-	//@Test
+	// @Test
+	public void testcalcTour() {
+		tour.initializeTour();
+		tour.segmentOrt[1] = true;
+		tour.segmentOrt[2] = true;
+		System.out.println(tour);
+		System.out.println(tour.calcTour());
+	}
+
+	// @Test
 	public void testNext() {
 		for (int i = 0; i < 5; i++) {
 			tour.initializeTour();
@@ -43,7 +51,7 @@ public class TwoLevelTourTest {
 	/**
 	 * ortが混ざっても正しく動作するかの確認
 	 */
-	//@Test
+	// @Test
 	public void testNext2() {
 		for (int i = 0; i < 5; i++) {
 			tour.initializeTour();
@@ -57,7 +65,7 @@ public class TwoLevelTourTest {
 		}
 	}
 
-	//@Test
+	// @Test
 	public void testPrev() {
 		for (int i = 0; i < 5; i++) {
 			tour.initializeTour();
@@ -72,7 +80,7 @@ public class TwoLevelTourTest {
 	/**
 	 * ortが混ざっても正しく動作するかの確認
 	 */
-	@Test
+	// @Test
 	public void testPrev2() {
 		for (int i = 0; i < 5; i++) {
 			tour.initializeTour();
