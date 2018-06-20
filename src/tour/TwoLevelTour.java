@@ -138,7 +138,6 @@ public class TwoLevelTour extends Tour {
 		int dist = 0;
 		int prevCity = 0;
 		int currentCity = segmentTour[segmentIDFromIndex[0]][segmentOrt[segmentIDFromIndex[0]] ? segmentTour[segmentIDFromIndex[0]].length - 1 : 0];
-
 		for (int i = 0; i < cityNum; i++) {
 			prevCity = currentCity;
 			currentCity = next(prevCity);
@@ -149,8 +148,100 @@ public class TwoLevelTour extends Tour {
 
 	@Override
 	public void flipTour(int cityA, int cityB, int cityC, int cityD) {
+		// head,tailはcityID
+		int head, tail;
+		int ad = Math.abs(getIndexFromStart(cityA) - getIndexFromStart(cityD)) - 1;
+		int bc = Math.abs(getIndexFromStart(cityB) - getIndexFromStart(cityC)) - 1;
+
+		if (ad < bc) {
+			head = cityD;
+			tail = cityA;
+		}
+		else {
+			head = cityB;
+			tail = cityC;
+		}
+
+		// すべてortはFと仮定
+		int[] marginHead;
+		int[] marginTail;
+		int segLength;
+		int segID;
+		// 分割
+		if (!isTerminal(head, true)) {
+			segID = segmentIDFromCityID[head];
+			segLength = segmentTour[segID].length;
+			int[] newArray = new int[segmentOrt[segID] ? positionInSegmentFromCityID[head] + 1 : segLength - positionInSegmentFromCityID[head]];
+			marginHead = new int[segLength - newArray.length];
+			for (int i = 0; i < newArray.length; i++) {
+				if (segmentOrt[segID])
+					newArray[i] = segmentTour[segID][i];
+				else
+					newArray[i] = segmentTour[segID][marginHead.length + i];
+			}
+			for (int i = 0; i < marginHead.length; i++) {
+				if (segmentOrt[segID])
+					marginHead[i] = segmentTour[segID][segLength - i - 1];
+				else
+					marginHead[i] = segmentTour[segID][i];
+			}
+			segmentTour[segID] = newArray;
+		}
+		if (!isTerminal(tail, false)) {
+			segID = segmentIDFromCityID[tail];
+			segLength = segmentTour[segID].length;
+			int[] newArray = new int[segmentOrt[segID] ? segLength - positionInSegmentFromCityID[tail] : positionInSegmentFromCityID[tail] + 1];
+			marginTail = new int[segLength - newArray.length];
+			for (int i = 0; i < newArray.length; i++) {
+				if (segmentOrt[segID])
+					newArray[i] = segmentTour[segID][marginTail.length + i];
+				else
+					newArray[i] = segmentTour[segID][i];
+			}
+			for (int i = 0; i < marginTail.length; i++) {
+				if (segmentOrt[segID])
+					marginTail[i] = segmentTour[segID][segLength - newArray.length - i - 1];
+				else
+					marginTail[i] = segmentTour[segID][newArray.length + i];
+			}
+			segmentTour[segID] = newArray;
+		}
+
+		// 交換
+
+		// 結合
 
 		updated = false;
+	}
+
+	/**
+	 * cityIDが端点かどうかを返すメソッド
+	 *
+	 * @param cityID
+	 * @return
+	 */
+	boolean isTerminal(int cityID, boolean isHead) {
+		if (isHead && segmentOrt[segmentIDFromCityID[cityID]] && positionInSegmentFromCityID[cityID] == segmentTour[segmentIDFromCityID[cityID]].length - 1)
+			return true;
+		if (isHead && !segmentOrt[segmentIDFromCityID[cityID]] && positionInSegmentFromCityID[cityID] == 0)
+			return true;
+		if (!isHead && segmentOrt[segmentIDFromCityID[cityID]] && positionInSegmentFromCityID[cityID] == 0)
+			return true;
+		if (!isHead && !segmentOrt[segmentIDFromCityID[cityID]] && positionInSegmentFromCityID[cityID] == segmentTour[segmentIDFromCityID[cityID]].length - 1)
+			return true;
+		return false;
+	}
+
+	int getIndexFromStart(int city) {
+		int segID = segmentIDFromCityID[city];
+		int segIndex = segmentIndexFromID[segID];
+		int position = positionInSegmentFromCityID[city];
+		int segLength = segmentTour[segID].length;
+		int count = 0;
+		for (int i = 0; i < segIndex; i++) {
+			count += segmentTour[segmentIDFromIndex[i]].length;
+		}
+		return count + (segmentOrt[segID] ? segLength - position : position + 1);
 	}
 
 	@Override

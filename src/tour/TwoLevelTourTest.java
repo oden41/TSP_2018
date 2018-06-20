@@ -3,6 +3,7 @@ package tour;
 import java.util.Random;
 
 import org.junit.Before;
+import org.junit.Test;
 
 import data.CityData;
 import data.Param;
@@ -17,7 +18,7 @@ public class TwoLevelTourTest {
 		// data = new CityData(dir + "\\tsp_data\\ca4663.tsp");
 		data = new CityData(dir + "\\tsp_data\\test.tsp");
 		tour = new TwoLevelTour(data.getCityNum(), data);
-		Param.rand = new Random(1);
+		Param.rand = new Random(5);
 	}
 
 	// @Test
@@ -33,6 +34,29 @@ public class TwoLevelTourTest {
 		tour.segmentOrt[2] = true;
 		System.out.println(tour);
 		System.out.println(tour.calcTour());
+	}
+
+	// @Test
+	public void testGetIndexFromStart() {
+		tour.initializeTour();
+		tour.segmentOrt[1] = true;
+		tour.segmentOrt[0] = true;
+		System.out.println(tour);
+		for (int i = 0; i < tour.cityNum; i++) {
+			System.out.println(i + " : " + tour.getIndexFromStart(i));
+		}
+	}
+
+	// @Test
+	public void testIsTerminal() {
+		tour.initializeTour();
+		tour.segmentOrt[1] = true;
+		tour.segmentOrt[0] = true;
+		System.out.println(tour);
+		for (int i = 0; i < tour.cityNum; i++) {
+			System.out.println(i + ", head : " + tour.isTerminal(i, true));
+			System.out.println(i + ", tail : " + tour.isTerminal(i, false));
+		}
 	}
 
 	// @Test
@@ -92,5 +116,17 @@ public class TwoLevelTourTest {
 			}
 			System.out.println("--");
 		}
+	}
+
+	@Test
+	public void testFilpSplit() {
+		tour.initializeTour();
+		tour.segmentOrt[1] = true;
+		tour.segmentOrt[2] = true;
+		System.out.println(tour);
+		int cityA = Param.rand.nextInt(tour.cityNum);
+		int cityC = Param.rand.nextInt(tour.cityNum);
+		System.out.println("cityA: " + cityA + ", cityC :" + cityC);
+		tour.flipTour(cityA, tour.next(cityA), cityC, tour.next(cityC));
 	}
 }
