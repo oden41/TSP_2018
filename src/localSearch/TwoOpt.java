@@ -6,6 +6,7 @@ import java.util.HashMap;
 import data.CandidateList;
 import data.CityData;
 import tour.Tour;
+import tour.TwoLevelTour;
 
 public class TwoOpt {
 	int cityNum;
@@ -20,18 +21,18 @@ public class TwoOpt {
 		this.cityNum = cityNum;
 		this.k = k;
 		this.data = data;
-		tour = new Tour(cityNum, data);
 		this.neighborList = neighborList;
 		this.inverseNL = invNL;
 	}
 
 	public void doOneTrial() {
+		//tour = new Tour(cityNum, data);
+		tour = new TwoLevelTour(cityNum, data);
 		candidateList = new CandidateList(cityNum);
 		tour.initializeTour();
 
 		while (candidateList.getSize() != 0) {
-			ITR:
-			{
+			ITR: {
 				int cityA = candidateList.get();
 				int cityB;
 				for (int ort = 0; ort < 2; ort++) {
@@ -51,7 +52,8 @@ public class TwoOpt {
 						if (data.calcDistance(cityA, cityB) <= data.calcDistance(cityA, cityC))
 							break;
 
-						int diff = (data.calcDistance(cityA, cityC) + data.calcDistance(cityB, cityD)) - (data.calcDistance(cityA, cityB) + data.calcDistance(cityC, cityD));
+						int diff = (data.calcDistance(cityA, cityC) + data.calcDistance(cityB, cityD))
+								- (data.calcDistance(cityA, cityB) + data.calcDistance(cityC, cityD));
 						if (diff < 0) {
 							if (ort == 0)
 								tour.flipTour(cityA, cityB, cityC, cityD);

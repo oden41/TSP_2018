@@ -118,8 +118,9 @@ public class TwoLevelTourTest {
 		}
 	}
 
-	@Test
-	public void testFilpSplit() {
+	//@Test
+	public void testFilp() {
+		Param.rand = new Random(46);
 		tour.initializeTour();
 		tour.segmentOrt[1] = true;
 		tour.segmentOrt[2] = true;
@@ -128,5 +129,49 @@ public class TwoLevelTourTest {
 		int cityC = Param.rand.nextInt(tour.cityNum);
 		System.out.println("cityA: " + cityA + ", cityC :" + cityC);
 		tour.flipTour(cityA, tour.next(cityA), cityC, tour.next(cityC));
+		System.out.println(tour);
+	}
+
+	//@Test
+	public void testFilpSplitMult() {
+		for (int i = 0; i < 100; i++) {
+			Param.rand = new Random(i);
+			System.out.println("rand :" + i);
+			tour = new TwoLevelTour(data.getCityNum(), data);
+			tour.initializeTour();
+			tour.segmentOrt[1] = true;
+			tour.segmentOrt[2] = true;
+			System.out.println(tour);
+			int cityA = Param.rand.nextInt(tour.cityNum);
+			int cityC = Param.rand.nextInt(tour.cityNum);
+			System.out.println("cityA: " + cityA + ", cityC :" + cityC);
+			tour.flipTour(cityA, tour.next(cityA), cityC, tour.next(cityC));
+			System.out.println(tour);
+			System.out.println("---");
+		}
+	}
+
+	@Test
+	public void testFlipTwice() {
+		for (int i = 0; i < 100; i++) {
+			Param.rand = new Random(i);
+			System.out.println("rand :" + i);
+			tour = new TwoLevelTour(data.getCityNum(), data);
+			tour.initializeTour();
+			tour.segmentOrt[1] = true;
+			tour.segmentOrt[2] = true;
+			System.out.println(tour);
+			int cityA = Param.rand.nextInt(tour.cityNum);
+			int cityC = Param.rand.nextInt(tour.cityNum);
+			System.out.println("cityA: " + cityA + ", cityC :" + cityC);
+			tour.flipTour(cityA, tour.next(cityA), cityC, tour.next(cityC));
+			System.out.println(tour);
+			cityA = Param.rand.nextInt(tour.cityNum);
+			cityC = Param.rand.nextInt(tour.cityNum);
+			System.out.println("cityA: " + cityA + ", cityC :" + cityC);
+			tour.flipTour(cityA, tour.next(cityA), cityC, tour.next(cityC));
+			System.out.println(tour);
+			System.out.println("---");
+		}
 	}
 }
