@@ -26,9 +26,9 @@ public class NeighborCitiesMaker {
 
 		try (Stream<String> stream = Files.lines(Paths.get(path))) {
 			// read each line
-			result = stream.map(line -> line.split(",")).map(line -> Arrays.stream(line).mapToInt(Integer::parseInt).toArray()).toArray(int[][]::new);
-		}
-		catch (IOException e) {
+			result = stream.map(line -> line.split(","))
+					.map(line -> Arrays.stream(line).mapToInt(Integer::parseInt).toArray()).toArray(int[][]::new);
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -71,11 +71,12 @@ public class NeighborCitiesMaker {
 	 * @param string
 	 */
 	public void writeToFile(int[][] result, String fileName) {
-		List<String> list = Arrays.stream(result).map(line -> Arrays.stream(line).mapToObj(String::valueOf).collect(Collectors.joining(","))).collect(Collectors.toList());
+		List<String> list = Arrays.stream(result)
+				.map(line -> Arrays.stream(line).mapToObj(String::valueOf).collect(Collectors.joining(",")))
+				.collect(Collectors.toList());
 		try {
 			Files.write(Paths.get(System.getProperty("user.dir"), "\\" + fileName), list, StandardOpenOption.CREATE);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -98,6 +99,7 @@ public class NeighborCitiesMaker {
 			}
 			result.put(i, list);
 		}
+
 		return result;
 	}
 }
