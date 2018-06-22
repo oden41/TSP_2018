@@ -26,9 +26,9 @@ public class NeighborCitiesMaker {
 
 		try (Stream<String> stream = Files.lines(Paths.get(path))) {
 			// read each line
-			result = stream.map(line -> line.split(","))
-					.map(line -> Arrays.stream(line).mapToInt(Integer::parseInt).toArray()).toArray(int[][]::new);
-		} catch (IOException e) {
+			result = stream.map(line -> line.split(",")).map(line -> Arrays.stream(line).mapToInt(Integer::parseInt).toArray()).toArray(int[][]::new);
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 
@@ -71,12 +71,11 @@ public class NeighborCitiesMaker {
 	 * @param string
 	 */
 	public void writeToFile(int[][] result, String fileName) {
-		List<String> list = Arrays.stream(result)
-				.map(line -> Arrays.stream(line).mapToObj(String::valueOf).collect(Collectors.joining(",")))
-				.collect(Collectors.toList());
+		List<String> list = Arrays.stream(result).map(line -> Arrays.stream(line).mapToObj(String::valueOf).collect(Collectors.joining(","))).collect(Collectors.toList());
 		try {
 			Files.write(Paths.get(System.getProperty("user.dir"), "\\" + fileName), list, StandardOpenOption.CREATE);
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -102,4 +101,24 @@ public class NeighborCitiesMaker {
 
 		return result;
 	}
+
+	public HashMap<Integer, ArrayList<Integer>> makeInverseNeighborCityListFromPath(String path) {
+		HashMap<Integer, ArrayList<Integer>> result = new HashMap<>();
+		ArrayList<String> list = new ArrayList<>();
+		try {
+			list = Files.lines(Paths.get(path)).collect(Collectors.toCollection(ArrayList::new));
+		}
+		catch (IOException e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+		}
+		for (int i = 0; i < list.size(); i++) {
+			String str = list.get(i);
+			ArrayList<Integer> invN = Stream.of(str.split(",")).mapToInt(s -> Integer.parseInt(s)).boxed().collect(Collectors.toCollection(ArrayList::new));
+			result.put(i, invN);
+		}
+
+		return result;
+	}
+
 }
